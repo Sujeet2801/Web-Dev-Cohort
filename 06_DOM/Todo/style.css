@@ -1,0 +1,20 @@
+
+body {
+    text-align: center;
+}
+
+.addClass {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background-color: gray;
+    width: 300px;
+}
+
+#closeButton {
+    width: 70px;
+    height: 30px;
+    
+}
