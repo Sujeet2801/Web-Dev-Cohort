@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- <h1 class="heading">Kanban Board </h1> -->
+
+    <div class="container">
+
+        <div class="board" id="todoboard">
+            <h2 class="title">To Do</h2>
+            <div class="items">
+
+                <div class="item" draggable="true" >
+                    <p >Learn JS </p>
+                    <button type="submit" class="deleteButton">
+                        <img src="./delete.png" class="deleteImage" alt="delete button">
+                    </button>
+                </div>
+
+                <div class="item" draggable="true" >
+                    <p >Learn React </p>
+                    <button class="deleteButton" type="submit">
+                        <img src="./delete.png" class="deleteImage" alt="delete button">
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="board" id="progress">
+            <h2 class="title">In Progress</h2>
+        </div>
+
+        <div class="board" id="Completed">
+            <h2 class="title">Completed</h2>
+        </div>
+        
+    </div>
+
+    <button id="addTaskButton" class="button" type="button">Add Task</button>
+
+    <button id="addTable" class="button" type="button">Add Table</button>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: linear-gradient(90deg, rgba(255, 240, 200, 1) 0%, rgba(200, 255, 250, 1) 50%, rgba(255, 200, 230, 1) 100%);
+    background-size: 300% 300%;
+    animation: gradientAnimation 6s infinite alternate;
+    
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.heading{
+    color: blue;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.container {
+    margin-top: 20px;
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    /* height: 70vh; */
+    min-height: 70vh;
+}
+
+.board {
+    /* border: 2px solid black; */
+    box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+    width: 250px;
+    border-radius: 10px;
+}
+
+.title{
+    margin-top: 15px;
+    text-align: center;
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+}
+
+.items {
+    padding-top: 5px;
+    margin-bottom: 20px;
+    
+}
+
+.item {
+    border: 1px solid black;
+    margin: 10px 20px;
+    padding: 8px 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+:hover.item {
+    background-color: black;
+    color: wheat;
+    cursor: pointer;
+}
+.button {
+    display: flex;
+    background-color: rgb(35, 35, 83);
+    color: white;
+    text-decoration: none;
+    padding: 13px 35px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 10px;
+    margin-left: 300px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    
+}
+
+:hover.button{
+    background-color: #fff;
+    color: black;
+}
+
+.deleteImage{
+    width: 15px;
+    text-decoration: none;
+}
