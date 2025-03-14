@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="heading">Calculator</h1>
+        <div class="main">
+            <div class="display" id="display-number">
+                
+            </div>
+
+            <div class="buttons" id="buttons-container">
+                <button value="1" type="submit">1</button>
+                <button value="2" type="submit">2</button>
+                <button value="3" type="submit">3</button>
+                <button value="+" type="submit">+</button>
+                <button value="4" type="submit">4</button>
+                <button value="5" type="submit">5</button>
+                <button value="6" type="submit">6</button>
+                <button value="-" type="submit">-</button>
+                <button value="7" type="submit">7</button>
+                <button value="8" type="submit">8</button>
+                <button value="9" type="submit">9</button>
+                <button type="submit" id="total-button" onclick="compute()">Enter</button>
+                <button value="0" type="submit">0</button>
+                <button type="submit" id="clear-button" onclick="clearDisplay()">Clear </button>
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
