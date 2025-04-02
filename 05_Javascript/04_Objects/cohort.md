@@ -10,4 +10,3 @@ Object is an entity which have property(attribute) and funtionality(methods in J
 ## Next steps
 - [Install Markdoc](/docs/getting-started)
 - [Explore the syntax](/docs/syntax)
-
