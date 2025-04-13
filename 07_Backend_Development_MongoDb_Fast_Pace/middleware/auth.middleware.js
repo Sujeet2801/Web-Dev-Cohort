@@ -1,31 +1,31 @@
 import jwt from "jsonwebtoken";
+
 export const isLoggedIn = async (req, res, next) => {
   try {
-    console.log(req.cookies);
-    let token = req.cookies;
+    console.log("rached here");
+    // console.log("Cookies Received:", req.cookies);
 
-    console.log("Token Found: ", token ? "YES" : "NO");
+    const token = req.cookies.token;
+    console.log("Token Found:", token ? "YES" : "NO");
 
     if (!token) {
-      console.log("No token");
-      return res.status(401)({
+      console.log("No token found in cookies");
+      return res.status(401).json({
         success: false,
-        message: "Authetication failed",
+        message: "Authentication failed: No token",
       });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECREAT);
-    console.log("decoded data", decoded);
-    req.user = decoded;
-    console.log("reached");
+    console.log("Decoded data:", decoded);
 
+    req.user = decoded;
     next();
   } catch (error) {
-    console.log("Auth middleware failed");
+    console.log("Auth middleware failed", error.message);
     return res.status(401).json({
       success: false,
-      message: "failed",
+      message: "Invalid token",
     });
   }
-  next();
 };

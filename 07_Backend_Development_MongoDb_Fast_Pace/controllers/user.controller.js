@@ -137,7 +137,7 @@ const login = async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log(isMatch);
+    // console.log(isMatch);
 
     if (!user.isVerified) {
       return res.status(400).json({
@@ -159,16 +159,25 @@ const login = async (req, res) => {
       }
     );
 
+    console.log("=== Login Controller Debug ===");
+    console.log("Token generated:", token);
+
+    // Set cookie with minimal options for testing
     const cookieOptions = {
-      httpOnly: true,
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: false, // Set to false for testing
+      secure: false, // Set to false for local development
+      sameSite: "lax",
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     };
 
+    console.log("Cookie options:", cookieOptions);
+
+    // Set cookie before sending response
     res.cookie("token", token, cookieOptions);
-    console.log("Request Headers:", req.headers);
-    console.log("Cookies Received:", req.cookies);
-    console.log("Set-Cookie Header:", res.getHeaders()["set-cookie"]);
+
+    // Log headers to verify cookie is set
+    // console.log("Response headers:", res.getHeaders());
 
     res.status(200).json({
       success: true,
@@ -181,7 +190,6 @@ const login = async (req, res) => {
       },
     });
 
-    console.log("Set-Cookie Header:", res.getHeaders()["set-cookie"]);
   } catch (error) {
     res.status(400).json({
       message: "Login Failed",
@@ -194,22 +202,114 @@ const login = async (req, res) => {
 const getMe = async (req, res) => {
   try {
     console.log("reached at profile level");
-  } catch (error) {}
+  } catch (error) {
+    console.log("not reached");
+    
+  }
 };
 
-const logoutUser = async (req, res) => {
+const logoutUser = (req, res) => {
   try {
-  } catch (error) {}
+    // Clear the token cookie
+    res.cookie("token", "", {
+      httpOnly: false,
+      secure: false,
+      sameSite: "lax",
+      path: "/",
+      expires: new Date(0), // This will make the cookie expire immediately
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error during logout",
+    });
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  //get user by email and send reset token
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({
+      message: "Email is required",
+    });
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid email",
+      });
+    }
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    user.passwordResetToken = resetToken;
+    user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+    await user.save();
+
+    const resetUrl = `${process.env.BASE_URL}/api/v1/users/reset-password/${resetToken}`;
+
+    const transporter = nodemailer.createTransport({
+      host: process.env.MAILTRAP_HOST,
+      auth: {
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+    });
+    const mailOptions = {
+      from: process.env.MAILTRAP_SENDER_EMAIL,
+      to: user.email,
+      subject: "Reset your password",
+      text: `Please click on the following link to reset your password: ${resetUrl}`,
+    };
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({
+      message: "Reset token sent to email",
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
 };
 
 const resetPassword = async (req, res) => {
+  //reset password
+  const { token } = req.params;
+  const { password } = req.body;
+  if (!token || !password) {
+    return res.status(400).json({
+      message: "All fields are required",
+    });
+  }
   try {
-  } catch (error) {}
-};
-
-const forgetPassword = async (req, res) => {
-  try {
-  } catch (error) {}
+    const user = await User.findOne({
+      passwordResetToken: token,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid token",
+      });
+    }
+    user.password = password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+    res.status(200).json({
+      message: "Password reset successful",
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
 };
 
 export {
@@ -218,6 +318,6 @@ export {
   login,
   getMe,
   logoutUser,
-  forgetPassword,
+  forgotPassword,
   resetPassword,
 };
